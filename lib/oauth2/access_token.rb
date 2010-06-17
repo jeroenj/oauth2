@@ -1,10 +1,11 @@
 module OAuth2
   class AccessToken
-    attr_reader :client, :token, :refresh_token
+    attr_reader :client, :token, :expires_in, :refresh_token
 
-    def initialize(client, token, refresh_token = nil)
+    def initialize(client, token, expires_in = nil, refresh_token = nil)
       @client = client
       @token = token
+      @expires_in = expires_in
       @refresh_token = refresh_token
     end
     
