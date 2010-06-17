@@ -34,7 +34,7 @@ module OAuth2
         })
       end
 
-      def access_token_params(code, options = {}) #:nodoc:
+      def refresh_token_params(code, options = {}) #:nodoc:
         super(options).merge({
           :grant_type => 'refresh_token',
           :code => code
