@@ -16,8 +16,8 @@ module OAuth2
         parse_response(response)
       end
 
-      def refresh_access_token(code, options = {})
-        response = @client.request(:post, @client.access_token_url, refresh_token_params(code, options))
+      def refresh_access_token(refresh_token, options = {})
+        response = @client.request(:post, @client.access_token_url, refresh_token_params(refresh_token, options))
         parse_response(response)
       end
 
@@ -34,10 +34,10 @@ module OAuth2
         })
       end
 
-      def refresh_token_params(code, options = {}) #:nodoc:
+      def refresh_token_params(refresh_token, options = {}) #:nodoc:
         super(options).merge({
           :grant_type => 'refresh_token',
-          :code => code
+          :refresh_token => refresh_token
         })
       end
 
