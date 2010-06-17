@@ -42,10 +42,10 @@ module OAuth2
       end
 
       def parse_response(response)
-        params   = Yajl::Parser.parse(response) rescue Rack::Utils.parse_query(response)
-        access   = params['access_token']
+        params     = Yajl::Parser.parse(response) rescue Rack::Utils.parse_query(response)
+        access     = params['access_token']
         expires_in = params['expires_in']
-        refresh  = params['refresh_token']
+        refresh    = params['refresh_token']
         OAuth2::AccessToken.new(@client, access, refresh)        
       end
     end
