@@ -15,6 +15,7 @@ module OAuth2
         response = @client.request(:post, @client.access_token_url, access_token_params(code, options))
         params   = Yajl::Parser.parse(response) rescue Rack::Utils.parse_query(response)
         access   = params['access_token']
+        expires_in = params['expires_in']
         refresh  = params['refresh_token']
         OAuth2::AccessToken.new(@client, access, refresh)
       end
@@ -27,8 +28,8 @@ module OAuth2
       
       def access_token_params(code, options = {}) #:nodoc:
         super(options).merge({
-          'type' => 'web_server',
-          'code' => code
+          :grant_type => 'authorization_code',
+          :code => code
         })
       end
     end
