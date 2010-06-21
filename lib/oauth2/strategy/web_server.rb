@@ -1,4 +1,4 @@
-require 'yajl'
+require 'multi_json'
 
 module OAuth2
   module Strategy
@@ -42,11 +42,17 @@ module OAuth2
       end
 
       def parse_response(response)
-        params     = Yajl::Parser.parse(response) rescue Rack::Utils.parse_query(response)
+        params     = MultiJson.decode(response) rescue nil
+        # the ActiveSupport JSON parser won't cause an exception when
+        # given a formencoded string, so make sure that it was
+        # actually parsed in an Hash. This covers even the case where
+        # it caused an exception since it'll still be nil.
+        params     = Rack::Utils.parse_query(response) unless params.is_a? Hash
+
         access     = params['access_token']
-        expires_in = params['expires_in']
         refresh    = params['refresh_token']
-        OAuth2::AccessToken.new(@client, access, refresh)        
+        expires_in = params['expires_in']
+        OAuth2::AccessToken.new(@client, access, refresh, expires_in)     
       end
     end
   end
